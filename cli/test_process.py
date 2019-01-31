@@ -1,3 +1,4 @@
+import os
 from tempfile import TemporaryDirectory
 from unittest import TestCase
 
@@ -24,7 +25,7 @@ class TestProcess(TestCase):
         self.assertEqual("", output)
 
     def test_pwd(self):
-        pwd = CustomProcess("pwd", []).run(None, {})
+        pwd = os.getcwd()
 
         process = Pwd([])
         output = process.run(None, {})
