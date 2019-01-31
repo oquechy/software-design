@@ -12,7 +12,9 @@ def controller():
             tokens = read(line, scope)
             processes = interpret(tokens)
             pipe = None
-            if len(processes) == 1:
+            if not processes:
+                continue
+            elif len(processes) == 1:
                 process = processes[0]
                 if isinstance(process, Exit):
                     break
@@ -22,7 +24,7 @@ def controller():
                 for process in processes:
                     pipe = process.run(pipe, {})
             print(pipe)
-        except (FileNotFoundError, ArgumentError, ParseError, VariableExpansionError) as e:
+        except (FileNotFoundError, ArgumentError, ParseError, VariableExpansionError, PermissionError) as e:
             print(str(e))
 
 

@@ -25,6 +25,9 @@ class ParseError(Exception):
 
 def interpret(tokens):
     """Wraps commands separated by pipes into instances of Process class."""
+
+    if not tokens:
+        return []
     processes = []
     state = State.WAITING_COMMAND
     command = None
