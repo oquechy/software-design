@@ -10,9 +10,9 @@ class TestProcess(TestCase):
         output = process.run(None, {})
         self.assertEqual("hello kitty", output)
 
-        process = CustomProcess("grep", ["lisa"])
-        output = process.run("l\ni\nlisa\ns\na\nalisa", {})
-        self.assertEqual("lisa\nalisa", output)
+        process = CustomProcess("python", [])
+        output = process.run("print(1 + 1)", {})
+        self.assertEqual("2", output)
 
     def test_echo(self):
         process = Echo(["hello", "kitty"])
