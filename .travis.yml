@@ -1,11 +1,10 @@
 language: python
 os:
   - linux
-  - windows
 python:
   - "3.5"
 cache: pip
 install:
   - pip install -U pytest
 script:
-  - python -m pytest cli/
+  - python -m pytest cli
