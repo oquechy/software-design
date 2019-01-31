@@ -14,4 +14,4 @@ class TestInterpret(TestCase):
 
         processes = interpret(["pwd", "|", "wc", "hello.txt"])
         self.assertEqual([Pwd([]), Wc(["hello.txt"])], processes)
-   
+ 

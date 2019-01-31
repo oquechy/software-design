@@ -4,7 +4,7 @@ from cli.process import Exit, ArgumentError
 
 
 def controller():
-    """Runs cli. Supported commands: cat[file], echo, wc [file], pwd, exit, a=b."""
+    """Runs cli. Supported commands: cat [file], echo, wc [file], pwd, exit, a=b."""
     scope = {}
     while True:
         try:
