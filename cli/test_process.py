@@ -2,7 +2,7 @@ import os
 from tempfile import TemporaryDirectory
 from unittest import TestCase
 
-from cli.process import CustomProcess, Echo, Pwd, Exit, Cat, Wc, Assignment
+from cli.process import CustomProcess, Echo, Pwd, Exit, Cat, Wc, Assignment, Grep
 
 
 class TestProcess(TestCase):
@@ -88,3 +88,24 @@ class TestProcess(TestCase):
         process = Exit([])
         output = process.run(None, {})
         self.assertEqual("", output)
+
+    def test_grep(self):
+        process = Grep(["Li.?a", "-w"])
+        output = process.run("Lia\nLisan\nLima", {})
+        self.assertEqual("Lia\nLima", output)
+
+        process = Grep(["Lisa", "-i"])
+        output = process.run("Lia\nrLiSAr\nLima", {})
+        self.assertEqual("rLiSAr", output)
+
+        process = Grep(["Lisa", "-A", "2"])
+        output = process.run("K\nLisa\nrLiSAr\nALisa\nK\nJ\nM\nLisa", {})
+        self.assertEqual("Lisa\nrLiSAr\nALisa\nK\nJ\nLisa", output)
+
+        with TemporaryDirectory() as dir:
+            with open(dir + "/test", "w") as f:
+                f.write("hello\nkitty")
+
+            process = Grep(["kIt", f.name, "-i"])
+            output = process.run(None, {})
+            self.assertEqual("kitty", output)

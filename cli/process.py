@@ -1,6 +1,8 @@
 import os
 import subprocess
+import re
 from abc import abstractmethod, ABC
+from docopt import docopt
 
 
 class Process(ABC):
@@ -111,3 +113,52 @@ class Assignment(Process):
             raise ArgumentError(__doc__)
         scope[self.args[0]] = self.args[1]
         return ""
+
+
+class Grep(Process):
+    """Filters lines from file or input which match given pattern.
+
+    Usage:
+      grep <pattern> [<file>] [-i] [-w] [-A <int>]
+
+    Options:
+      -i                Ignore the case.
+      -w                Match whole words.
+      -A <int>          Non-negative number of lines to print after a match [default: 0].
+
+    """
+
+    def __init__(self, args):
+        super().__init__("grep", args)
+
+    def run(self, input, scope):
+        args = docopt(str(self.__doc__), self.args, help=False)
+        if args["<file>"]:
+            with open(args["<file>"]) as f:
+                input = f.read()
+        if input:
+            pattern, context = self.process_args(args)
+            output = ""
+            gap = 0
+            for line in input.splitlines():
+                if pattern.search(line):
+                    output += line + '\n'
+                    gap = context
+                elif gap > 0:
+                    output += line + '\n'
+                    gap -= 1
+            return output.rstrip()
+        else:
+            return ""
+
+    def process_args(self, args):
+        pattern = args["<pattern>"]
+        if args["-w"]:
+            pattern = r"\b" + pattern + r"\b"
+        flags = re.IGNORECASE if args["-i"] else 0
+        return re.compile(pattern, flags), int(args["-A"])
+
+
+if __name__ == "__main__":
+    grep = Grep(["Lisa", "-A", "11", "-i"])
+    grep.run("", {})
