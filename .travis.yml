@@ -1,0 +1,10 @@
+language: python
+os:
+  - linux
+python:
+  - "3.5"
+cache: pip
+install:
+  - pip install -U pytest
+script:
+  - python -m pytest cli
