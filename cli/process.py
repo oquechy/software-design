@@ -132,12 +132,12 @@ class Grep(Process):
         super().__init__("grep", args)
 
     def run(self, input, scope):
-        args = docopt(str(self.__doc__), self.args, help=False)
+        args = docopt(str(self.__doc__), self.args)
         if args["<file>"]:
             with open(args["<file>"]) as f:
                 input = f.read()
+        pattern, context = self.process_args(args)
         if input:
-            pattern, context = self.process_args(args)
             output = ""
             gap = 0
             for line in input.splitlines():
@@ -155,10 +155,17 @@ class Grep(Process):
         pattern = args["<pattern>"]
         if args["-w"]:
             pattern = r"\b" + pattern + r"\b"
+        try:
+            ctx = int(args["-A"])
+            if ctx < 0:
+                raise ArgumentError(self.__doc__)
+        except ValueError:
+            raise ArgumentError(self.__doc__)
+
         flags = re.IGNORECASE if args["-i"] else 0
-        return re.compile(pattern, flags), int(args["-A"])
+        return re.compile(pattern, flags), ctx
 
 
 if __name__ == "__main__":
-    grep = Grep(["Lisa", "-A", "11", "-i"])
+    grep = Grep(["Lisa", "-A"])
     grep.run("", {})
