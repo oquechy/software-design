@@ -2,7 +2,7 @@ import os
 from tempfile import TemporaryDirectory
 from unittest import TestCase
 
-from cli.process import CustomProcess, Echo, Pwd, Exit, Cat, Wc, Assignment, Grep
+from cli.process import CustomProcess, Echo, Pwd, Exit, Cat, Wc, Assignment, Grep, ArgumentError
 
 
 class TestProcess(TestCase):
@@ -109,3 +109,20 @@ class TestProcess(TestCase):
             process = Grep(["kIt", f.name, "-i"])
             output = process.run(None, {})
             self.assertEqual("kitty", output)
+
+    def test_grep_incorrect_arg_type(self):
+        process = Grep(["-A", "Lisa", "2"])
+
+        def under_test():
+            process.run("Lisa", {})
+
+        self.assertRaises(ArgumentError, under_test)
+
+    def test_grep_incorrect_arg_value(self):
+        process = Grep(["-A", "-2", "Lisa"])
+
+        def under_test():
+            process.run("Lisa", {})
+
+        self.assertRaises(ArgumentError, under_test)
+
