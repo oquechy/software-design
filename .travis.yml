@@ -5,6 +5,6 @@ python:
   - "3.5"
 cache: pip
 install:
-  - pip install -U pytest
+  - pip install -r requirements.txt
 script:
   - python -m pytest cli
