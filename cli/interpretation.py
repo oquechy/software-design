@@ -1,6 +1,6 @@
 from enum import Enum
 
-from cli.process import Cat, Wc, Exit, Echo, Pwd, Assignment, CustomProcess
+from cli.process import Cat, Wc, Exit, Echo, Pwd, Assignment, CustomProcess, Grep
 
 
 class State(Enum):
@@ -14,6 +14,7 @@ command_to_process = {
     "exit": Exit,
     "pwd": Pwd,
     "echo": Echo,
+    "grep": Grep,
     "=": Assignment
 }
 

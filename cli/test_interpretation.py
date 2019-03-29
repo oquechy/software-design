@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from cli.interpretation import interpret
-from cli.process import CustomProcess, Echo, Cat, Assignment, Exit, Pwd, Wc
+from cli.process import CustomProcess, Echo, Cat, Assignment, Exit, Pwd, Wc, Grep
 
 
 class TestInterpret(TestCase):
@@ -12,6 +12,5 @@ class TestInterpret(TestCase):
         processes = interpret(["cat", "kitty.txt", "|", "kitty=hello", "|", "exit"])
         self.assertEqual([Cat(["kitty.txt"]), Assignment(["kitty", "hello"]), Exit([])], processes)
 
-        processes = interpret(["pwd", "|", "wc", "hello.txt"])
-        self.assertEqual([Pwd([]), Wc(["hello.txt"])], processes)
- 
+        processes = interpret(["pwd", "|", "wc", "hello.txt", "|", "grep", "pattern", "-i"])
+        self.assertEqual([Pwd([]), Wc(["hello.txt"]), Grep(["pattern", "-i"])], processes)
